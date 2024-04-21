@@ -1,0 +1,50 @@
+.contenedor1 {
+    border: 1px solid #df5151;
+    padding: 20px;
+    margin-bottom: 20px;
+   /* background-color: rgb(21, 184, 184);  */
+}
+
+.contenedor2{
+    display: flex;
+}
+
+.izquierda,.derecha{
+    flex: 1;
+    padding: 20px;
+
+}
+.izquierda{
+    background-color: rgb(173, 205, 206);
+}
+.derecha{
+    text-align: center;
+    background-color: rgb(232, 238, 236);
+    align-items: center;
+}
+.rojo {
+    color: red;
+}
+
+.mitad {
+    width: 50%;
+    height: 100vh; /* Altura del 100% de la ventana */
+    float: left; /* Alinear los elementos en línea */
+    box-sizing: border-box; /* Incluir bordes y rellenos en el ancho total */
+    /*border: 1px solid #ccc; /* Borde para visualización */
+    text-align: justify;
+}
+.mitad img{
+    width: 100%;
+    height: auto;
+}
+.margen-texto{
+    margin-left: 20px;
+    margin-right: 20px;
+
+}
+
+h2 +p{
+    font-size: 20px;
+    width: 100%;
+}

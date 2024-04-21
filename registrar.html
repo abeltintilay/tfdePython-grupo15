@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./estilos/estilosCocinadeJuan.css">
+    <link rel="stylesheet" href="./estilos/savanzadosCocinadeJuan.css">
+    <title>Registrarse</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <!--colocando hipervinculos-->
+            <a class="nav" href="index.html">Home</a>
+            <a class="nav" href="misRecetas.html">Mis recetas y acerca de mi</a>
+            <a class="nav" href="contact.html">Contacto</a>
+            <a class="nav" href="registrar.html">Registrarse</a>
+            <a class="nav" href="sucursales.html">Suscribirse</a>
+            <h1>La Cocina de Juan</h1>
+        </nav>
+    </header>
+        <main>
+            <h2>Formulario de registro</h2>
+            <form action="show_data.html" target="_blank">
+                <label for="nombre">Nombre :</label>
+                <input type="text" id="nombre" name="firstname" placeholder="Ingrese su primer nombre"><br><br>
+
+                <label for="apellido">Apellido :</label>
+                <input type="text" name="lastname" id="apellido" placeholder="Ingrese su apellido" required><br><br>
+
+                <label for="direccion">Direccion :</label>
+                <input type="text" name="addres" id="direccion" placeholder="Ingrese su direccion" required><br><br>
+
+                <label for="ciudad">Ciudad :</label>
+                <input type="text" name="ciudad" id="ciudad" placeholder="Ingrese la ciudad" required><br><br>
+
+                <label for="codigopostal">Codigo postal :</label>
+                <input type="text" name="zipcode" id="codigopostal" placeholder="Ingrese codigo postal" required value="4612"><br><br>
+
+                <label for="fechaNac">Fecha de Nacimiento :</label>
+                <input type="date" name="fechaNac" id="fechaNac" required><br><br>
+                <p>Genero
+                    <br>
+                    <input type="radio" name="gander" value="hombre" checked>Hombre
+                    <input type="radio" name="gander" value="mujer" >Mujer
+                    <input type="radio" name="gander" value="otro" >Otro
+                </p>
+                <p>Estudios
+                    <br>
+                    <input type="checkbox" name="estudio" value="primarios">Primario
+                    <input type="checkbox" name="estudio" value="secundario">Secundario
+                    <input type="checkbox" name="estudio" value="terciario">Terciarios
+                    <input type="checkbox" name="estudio" value="universitario">Universitarios
+                    <input type="checkbox" name="estudio" value="otro">Otros
+                </p>
+                <input type="submit" value="Enviar">
+                <br><br>
+            </form>
+        </main>
+    <footer>
+        <br>
+            <p>Derechos reservados @2024</p>
+        <br>
+    </footer>
+    
+</body>
+</html>

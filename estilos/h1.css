@@ -1,0 +1,35 @@
+h1{
+    font-style: oblique ;
+    margin-left: 20px;
+}
+    .centrar{
+        text-align: center;
+       /* background-color: aquamarine;  */
+    /*    align-content: center; */
+    }
+
+    .color-fondo{
+        background-color: rgb(127, 193, 238);
+        width: 100%;
+    }
+
+    .nombre{
+        color:black;
+        font-size: 18px;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        text-align: center;
+
+    }
+
+    table {
+        border-collapse: collapse;
+        background-color: rgb(236, 181, 181);
+    }
+    th, td {
+        border: 1px solid #3404b9;
+        padding: 8px;
+    }
+
+    footer {
+        width: 100%;
+    }

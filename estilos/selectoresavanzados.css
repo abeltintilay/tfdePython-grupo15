@@ -1,0 +1,102 @@
+/* selectores avanzados: la coma es para agrupar */
+/* por agrupamiento  utilizo la coma*/
+h2, h3,p{
+    color:rgb(43, 46, 226);
+}
+h1, h2{
+    text-align: center;
+}
+h2{
+/*    background-color: lightcoral;  */
+    color:rgb(7, 61, 238);
+
+}
+
+/* SELECTORES DESCENDIENTES */
+
+/* todos los p que sean descendientes de DIV
+SE VAN a poner del color seleccionado */
+/* este es p hijo del DIV */
+
+div p{
+ /*   background-color: rgb(233, 25, 94);  */
+    width: 300px;  /* tamanio del contenedor */
+}
+
+span p{
+    color:red;
+}
+/* descendiente directo del div utlilizo ">"  */
+div > p{
+ /*   background-color: rgb(177, 173, 230);   */
+    width: 300px;  /* tamanio del contenedor */
+}
+
+/* selectores adyacentes, utilizo el +  */
+div + p {
+    background-color: brown;
+
+}
+h3 ~ p {
+    color: blueviolet;
+}
+
+ul li:first-child{
+    color: red;
+}
+ul li:last-child{
+    color: cadetblue;
+}
+ul li:nth-child(5){
+    color: aqua;
+}
+
+
+/* pintando de a 3 
+ul li:nth-child(4n){
+    color: chartreuse;
+    background-color: blue;
+}
+
+ pintando pares e impares 
+
+ul li:nth-child(2n){
+    
+    background-color: rgb(4, 4, 83);
+}
+ul li:nth-child(2n+1){
+    
+    background-color: rgb(255, 0, 76);
+}
+
+/* css a los link */
+
+a:link{
+    color: blueviolet;
+    border: 2px coral;
+    background-color: lightgreen;
+}
+a:hover{
+    color: green;
+    border: 3px color(gre red rgb(15, 134, 15) blue);
+    background-color: greenyellow;
+}
+a:active{
+    color: orange;
+    border: orangered;
+    background-color: orangered;
+}
+/* PSEUDOELEMENTOS  */
+
+p::first-letter{
+    color: red;
+    font: 300;
+}
+
+p::selection{
+    background-color: blue;
+    color: chartreuse;
+}
+/*   p::before{content:"😂";}
+p::after{ content: "😈";}   */
+

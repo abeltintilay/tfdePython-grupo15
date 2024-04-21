@@ -1,0 +1,37 @@
+header{
+    background-color: black;
+    color:white;
+    width: 100%;
+    padding-top: 30px;
+    padding-left: 10px;
+
+}
+footer{
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.nav{
+    background-color: grey;
+    color: white;
+    text-decoration: none;
+    padding-top: 30px;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+/* alineando las etiquetas label*/
+
+label{
+    vertical-align: top;
+    display: inline-block;
+    width: 30%;
+    text-align: right;
+}
+
+/*
+.centrarloscheboxs{
+    width: 30%;
+}   
+*/
