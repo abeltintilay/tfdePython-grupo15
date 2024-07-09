@@ -112,7 +112,7 @@ class Catalogo:
 # Cuerpo del programa
 #--------------------------------------------------------------------
 # Crear una instancia de la clase Catalogo
-catalogo = Catalogo(host='192.168.100.7', user='root', password='elena', database='miapp5')   ###
+catalogo = Catalogo(host='192.168.100.7', user='root', password='proyecto123', database='miapp5')   ###
 
 # Carpeta para guardar las imagenes
 ruta_destino = './static/imagenes/'
