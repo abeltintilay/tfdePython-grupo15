@@ -120,7 +120,7 @@ catalogo = Catalogo(host='abeltintilay.mysql.pythonanywhere-services.com', user=
 # Carpeta para guardar las imagenes
 
 #ruta_destino = './static/imagenes/'
-ruta_destino = '/home/abeltintilay/mysite/static/imagenes'
+ruta_destino = '/home/abeltintilay/mysite/static/imagenes/'
 
 # /home/abeltintilay/mysite/static/imagenes
 
