@@ -114,7 +114,7 @@ class Catalogo:
 # Crear una instancia de la clase Catalogo
 #catalogo = Catalogo(host='192.168.100.7', user='root', password='elena', database='miapp5')   ###
 # aca realizamos el cambio para la base de datos que esta en pythonanywhere
-catalogo = Catalogo(host='abeltintilay.mysql.pythonanywhere-services.com', user='root', password='proyecto123', database='abeltintilay$miapp5')   ###
+catalogo = Catalogo(host='abeltintilay.mysql.pythonanywhere-services.com', user='abeltintilay', password='proyecto123', database='abeltintilay$miapp5')   ###
 
 
 # Carpeta para guardar las imagenes
