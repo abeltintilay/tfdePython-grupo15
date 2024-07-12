@@ -1,4 +1,5 @@
-#--------------------------------------------------------------------
+#--------------------------------------------------------------------  ESTA ES ABEL  1
+#--------------------------------------------------------------------  ESTA ES ABEL  2, ENLAZADO A PYTHONANIWHERE
 # Instalar con pip install Flask
 from flask import Flask, request, jsonify
 
@@ -111,11 +112,18 @@ class Catalogo:
 #--------------------------------------------------------------------
 # Crear una instancia de la clase Catalogo
 #catalogo = Catalogo(host='192.168.1.98', user='root', password='elena', database='worldviajes')
+# ESTA ES LA RUTA LOCAL,QUE FUNCIIONA CON LA BASE DE DATOS LOCAL
+###catalogo = Catalogo(host='192.168.100.7', user='root', password='elena', database='worldviajes')
 
-catalogo = Catalogo(host='192.168.100.7', user='root', password='elena', database='worldviajes')
+## ESTA SERA LA RUTA PARA CONECTAR CON LA BASE DE DATOS DE PYTHONANIWHERE
+catalogo = Catalogo(host='abeltintilay.mysql.pythonanywhere-services.com', user='abeltintilay', password='proyecto123', database='abeltintilay$miapp5')
 
 # Carpeta para guardar las imagenes
-ruta_destino = './static/imagenes/'
+###   ruta_destino = './static/imagenes/'
+
+ruta_destino = '/home/abeltintilay/mysite/static/imagenes'
+
+
 
 @app.route("/productos", methods=["GET"])
 def listar_productos():
