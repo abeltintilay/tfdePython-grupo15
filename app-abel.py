@@ -1,0 +1,284 @@
+#--------------------------------------------------------------------  ESTA ES ABEL  1
+#--------------------------------------------------------------------  ESTA ES ABEL  2, ENLAZADO A PYTHONANIWHERE
+#------------------------    PROBANDO LA CONEXION CONSTANTE , CON RECONECTAR, MODIFICACION APP-ABEL
+
+# Instalar con pip install Flask
+from flask import Flask, request, jsonify
+
+# Instalar con pip install flask-cors
+from flask_cors import CORS
+
+# Instalar con pip install mysql-connector-python
+import mysql.connector
+#
+#IMPORTANDO LA CONEXOIN DE ERROR 
+from mysql.connector import errorcode
+from mysql.connector.errors import OperationalError  # Importar correctamente
+
+
+# Si es necesario, pip install Werkzeug
+from werkzeug.utils import secure_filename
+
+# No es necesario instalar, es parte del sistema standard de Python
+import os
+import time
+#--------------------------------------------------------------------
+
+app = Flask(__name__)
+CORS(app)  # Esto habilitará CORS para todas las rutas
+
+class Catalogo:
+    #----------------------------------------------------------------
+    # Constructor de la clase
+    def __init__(self, host, user, password, database):
+        self.host=host
+        self.user=user
+        self.password=password
+        self.database=database
+        self.connect()
+#------------------------------------------------------------    
+    def connect(self):
+        try:
+            self.conn = mysql.connector.connect(
+                host=self.host,
+                user=self.user,
+                password=self.password,
+                database=self.database
+            )
+            self.cursor = self.conn.cursor(dictionary=True)
+            print("Conexión exitosa a la base de datos.")
+        except mysql.connector.Error as err:
+            if err.errno == errorcode.ER_BAD_DB_ERROR:
+                print("La base de datos no existe")
+                self.create_database()
+            elif err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                print("Algo está mal con tu nombre de usuario o contraseña")
+            else:
+                print(err)
+
+    def create_database(self):
+        try:
+            self.conn = mysql.connector.connect(
+                host=self.host,
+                user=self.user,
+                password=self.password
+            )
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(f"CREATE DATABASE {self.database}")
+            self.conn.database = self.database
+            self.cursor.execute('''CREATE TABLE IF NOT EXISTS paquetes (
+                codigo INT AUTO_INCREMENT PRIMARY KEY,
+                descripcion VARCHAR(255) NOT NULL,
+                cantidad INT NOT NULL,
+                precio DECIMAL(10, 2) NOT NULL,
+                imagen_url VARCHAR(255),
+                proveedor VARCHAR(40),
+                destino VARCHAR(40),
+                transporte VARCHAR(40))''')
+            self.conn.commit()
+        except mysql.connector.Error as err:
+            print(err)
+        finally:
+            self.cursor.close()
+
+#-----------------------------------------------------------------------------
+#FUNCION PARA RECONECTAR A LA BASE DE DATOS DE PYTHONANIWHERE
+    def reconnect(self):
+        self.conn.clese()
+        self.connect()
+#---------------------------------------------------------------------
+    def execute_query(self, query, params=None):
+        try:
+            self.cursor.execute(query, params)
+            self.conn.commit()
+        except OperationalError:
+            self.reconnect()
+            self.cursor.execute(query, params)
+            self.conn.commit()
+#---------------------------------------------------------------------
+    def listar_productos(self):
+        try:
+            self.cursor.execute("SELECT * FROM paquetes")
+        except OperationalError:
+            self.reconnect()
+            self.cursor.execute("SELECT * FROM paquetes")
+        return self.cursor.fetchall()
+#----------------------------------------------------------------------    
+    def consultar_producto(self, codigo):
+        try:
+            # Consultamos un producto a partir de su código
+            self.cursor.execute(f"SELECT * FROM paquetes WHERE codigo = {codigo}")
+        except OperationalError:
+            self.reconnect()  # RECONECTAMOS
+            self.cursor.execute(f"SELECT * FROM paquetes WHERE codigo = {codigo}")
+        return self.cursor.fetchone()
+#----------------------------------------------------------------------
+    # SIN MODIFICAICONES
+    def mostrar_producto(self, codigo):
+        # Mostramos los datos de un producto a partir de su código
+        producto = self.consultar_producto(codigo)
+        if producto:
+            print("-" * 40)
+            print(f"Código.....: {producto['codigo']}")
+            print(f"Descripción: {producto['descripcion']}")
+            print(f"Cantidad...: {producto['cantidad']}")
+            print(f"Precio.....: {producto['precio']}")
+            print(f"Imagen.....: {producto['imagen_url']}")
+            print(f"Proveedor..: {producto['proveedor']}")
+            print(f"destino.....: {producto['destino']}")
+            print(f"transporte..: {producto['transporte']}")
+            print("-" * 40)
+        else:
+            print("Producto no encontrado.")
+#-------------------------------------------------------------------------
+    def agregar_producto(self, descripcion, cantidad, precio, imagen, proveedor,destino,transporte):
+        sql = "INSERT INTO paquetes (descripcion, cantidad, precio, imagen_url, proveedor,destino,transporte) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        valores = (descripcion, cantidad, precio, imagen, proveedor,destino,transporte)
+
+        try:
+            self.cursor.execute(sql, valores)
+        except OperationalError:
+            self.reconnect()
+            self.cursor.execute(sql, valores)
+        self.conn.commit()
+        return self.cursor.lastrowid
+#--------------------------------------------------------------------------
+    def modificar_producto(self, codigo, nueva_descripcion, nueva_cantidad, nuevo_precio, nueva_imagen, nuevo_proveedor,nuevo_destino,nuevo_transporte):
+        sql = "UPDATE paquetes SET descripcion = %s, cantidad = %s, precio = %s, imagen_url = %s, proveedor = %s, destino = %s, transporte= %s WHERE codigo = %s"
+        valores = (nueva_descripcion, nueva_cantidad, nuevo_precio, nueva_imagen, nuevo_proveedor, nuevo_destino, nuevo_transporte, codigo)
+
+        try:
+            self.cursor.execute(sql, valores)
+        except OperationalError:
+            self.reconnect()
+            self.cursor.execute(sql, valores)
+        self.conn.commit()
+        return self.cursor.rowcount > 0
+#---------------------------------------------------------------------------
+    def eliminar_producto(self, codigo):
+        try:
+            self.cursor.execute(f"DELETE FROM paquetes WHERE codigo = {codigo}")
+        except OperationalError:
+            self.reconnect()
+            self.cursor.execute(f"DELETE FROM paquetes WHERE codigo = {codigo}")
+        self.conn.commit()
+        return self.cursor.rowcount > 0
+
+#--------------------------------------------------------------------
+# Cuerpo del programa
+#--------------------------------------------------------------------
+# Crear una instancia de la clase Catalogo
+#catalogo = Catalogo(host='192.168.1.98', user='root', password='elena', database='worldviajes')
+# ESTA ES LA RUTA LOCAL,QUE FUNCIIONA CON LA BASE DE DATOS LOCAL
+###catalogo = Catalogo(host='192.168.100.7', user='root', password='elena', database='worldviajes')
+
+## ESTA SERA LA RUTA PARA CONECTAR CON LA BASE DE DATOS DE PYTHONANIWHERE
+catalogo = Catalogo(host='abeltintilay.mysql.pythonanywhere-services.com', user='abeltintilay', password='proyecto123', database='abeltintilay$miapp5')
+
+# Carpeta para guardar las imagenes
+###   ruta_destino = './static/imagenes/'
+
+ruta_destino = '/home/abeltintilay/mysite/static/imagenes'
+
+
+
+@app.route("/productos", methods=["GET"])
+def listar_productos():
+    productos = catalogo.listar_productos()
+    return jsonify(productos)
+
+@app.route("/productos/<int:codigo>", methods=["GET"])
+def mostrar_producto(codigo):
+    producto = catalogo.consultar_producto(codigo)
+    if producto:
+        return jsonify(producto)
+    else:
+        return "Producto no encontrado", 404
+
+@app.route("/productos", methods=["POST"])
+def agregar_producto():
+    #Recojo los datos del form
+    descripcion = request.form['descripcion']
+    cantidad = request.form['cantidad']
+    precio = request.form['precio']
+    imagen = request.files['imagen']
+    proveedor = request.form['proveedor']
+    destino = request.form['destino']
+    transporte = request.form['transporte']  
+    nombre_imagen = ""
+
+    # Genero el nombre de la imagen
+    nombre_imagen = secure_filename(imagen.filename) 
+    nombre_base, extension = os.path.splitext(nombre_imagen) 
+    nombre_imagen = f"{nombre_base}_{int(time.time())}{extension}" 
+
+    nuevo_codigo = catalogo.agregar_producto(descripcion, cantidad, precio, nombre_imagen, proveedor,destino,transporte)
+    if nuevo_codigo:    
+        imagen.save(os.path.join(ruta_destino, nombre_imagen))
+        return jsonify({"mensaje": "Producto agregado correctamente.", "codigo": nuevo_codigo, "imagen": nombre_imagen}), 201
+    else:
+        return jsonify({"mensaje": "Error al agregar el producto."}), 500
+
+@app.route("/productos/<int:codigo>", methods=["PUT"])
+def modificar_producto(codigo):
+    #Se recuperan los nuevos datos del formulario
+    nueva_descripcion = request.form.get("descripcion")
+    nueva_cantidad = request.form.get("cantidad")
+    nuevo_precio = request.form.get("precio")
+    nuevo_proveedor = request.form.get("proveedor")
+    nuevo_destino = request.form.get("destino")
+    nuevo_transporte = request.form.get("transporte")
+    
+    # Verifica si se proporcionó una nueva imagen
+    if 'imagen' in request.files:
+        imagen = request.files['imagen']
+        # Procesamiento de la imagen
+        nombre_imagen = secure_filename(imagen.filename) 
+        nombre_base, extension = os.path.splitext(nombre_imagen) 
+        nombre_imagen = f"{nombre_base}_{int(time.time())}{extension}" 
+
+        # Guardar la imagen en el servidor
+        imagen.save(os.path.join(ruta_destino, nombre_imagen))
+        
+        # Busco el producto guardado
+        producto = catalogo.consultar_producto(codigo)
+        if producto: # Si existe el producto...
+            imagen_vieja = producto["imagen_url"]
+            # Armo la ruta a la imagen
+            ruta_imagen = os.path.join(ruta_destino, imagen_vieja)
+
+            # Y si existe la borro.
+            if os.path.exists(ruta_imagen):
+                os.remove(ruta_imagen)
+    else:     
+        producto = catalogo.consultar_producto(codigo)
+        if producto:
+            nombre_imagen = producto["imagen_url"]
+
+# Se llama al método modificar_producto pasando el codigo del producto y los nuevos datos.
+    if catalogo.modificar_producto(codigo, nueva_descripcion, nueva_cantidad, nuevo_precio, nombre_imagen, nuevo_proveedor, nuevo_destino, nuevo_transporte):
+        return jsonify({"mensaje": "Producto modificado"}), 200
+    else:
+        return jsonify({"mensaje": "Producto no encontrado"}), 403
+
+@app.route("/productos/<int:codigo>", methods=["DELETE"])
+def eliminar_producto(codigo):
+    # Primero, obtiene la información del producto para encontrar la imagen
+    producto = catalogo.consultar_producto(codigo)
+    if producto:
+        # Eliminar la imagen asociada si existe
+        ruta_imagen = os.path.join(ruta_destino, producto['imagen_url'])
+        if os.path.exists(ruta_imagen):
+            os.remove(ruta_imagen)
+
+        # Luego, elimina el producto del catálogo
+        if catalogo.eliminar_producto(codigo):
+            return jsonify({"mensaje": "Producto eliminado"}), 200
+        else:
+            return jsonify({"mensaje": "Error al eliminar el producto"}), 500
+    else:
+        return jsonify({"mensaje": "Producto no encontrado"}), 404
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
